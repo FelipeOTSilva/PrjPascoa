@@ -26,8 +26,6 @@ type
     procedure CalcullarPascoa(Ano: Integer);
     procedure ConverterParaFormatoData(dia: Integer; mes: string);
     procedure CalcularCarnaval(ano: TDateTime);
-    procedure CalcularSextaFeiraSanta(ano: TDateTime);
-    procedure CalcularCorpusChristi(ano: TDateTime);
   end;
 
 var
@@ -57,25 +55,14 @@ begin
     vMesNovo := '03';
 
   vAnoNovo := StrToDate(vDiaNovo + '/' + vMesNovo + '/' + AnoInteiro);
- // ShowMessage(DateToStr(vAnoNovo));
+  ShowMessage(DateToStr(vAnoNovo));
+
 end;
 
 procedure TAno.CalcularCarnaval(ano: TDateTime);
 begin
-  ano := ano - 47;
-  ShowMessage('O carnaval cairá no dia: ' + DateToStr(ano));
-end;
-
-procedure TAno.CalcularCorpusChristi(ano: TDateTime);
-begin
-  ano := ano + 60;
-  ShowMessage('O feriado de Corpus Christi cairá no dia: ' + DateToStr(ano));
-end;
-
-procedure TAno.CalcularSextaFeiraSanta(ano: TDateTime);
-begin
-  ano := ano - 2;
-  ShowMessage('A Sexta-Feira da paixão cairá no dia: ' + DateToStr(ano));
+  IncDay(ano, -47);
+  ShowMessage('O carnaval será no dia: ' + DateToStr(ano));
 end;
 
 procedure TAno.CalcullarPascoa(Ano: Integer);
@@ -150,8 +137,6 @@ begin
     AnoClasse.CalcullarPascoa(AnoClasse.ano);
     AnoClasse.ConverterParaFormatoData(AnoClasse.dia, AnoClasse.mes);
     AnoClasse.CalcularCarnaval(AnoClasse.vAnoNovo);
-    AnoClasse.CalcularSextaFeiraSanta(AnoClasse.vAnoNovo);
-    AnoClasse.CalcularCorpusChristi(AnoClasse.vAnoNovo);
   finally
     FreeAndNil(AnoClasse);
   end;

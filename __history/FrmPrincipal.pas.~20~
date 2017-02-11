@@ -19,9 +19,13 @@ type
   end;
 
   TAno = class
-    ano, x, y: Integer;
+    dia, ano, x, y: Integer;
+    mes: string;
+    vAnoNovo: TDateTime;
     procedure VerificarIntervaloDeData(VerificarAno: Integer);
     procedure CalcullarPascoa(Ano: Integer);
+    procedure ConverterParaFormatoData(dia: Integer; mes: string);
+    procedure CalcularCarnaval(ano: TDateTime);
   end;
 
 var
@@ -38,10 +42,31 @@ implementation
 
 { TAno }
 
+procedure TAno.ConverterParaFormatoData(dia: Integer; mes: string);
+var
+  vDiaNovo, AnoInteiro, vMesNovo: string;
+begin
+  AnoInteiro := IntToStr(Ano);
+  vDiaNovo := IntToStr(dia);
+
+  if mes = 'Abril' then
+    vMesNovo := '04'
+  else
+    vMesNovo := '03';
+
+  vAnoNovo := StrToDate(vDiaNovo + '/' + vMesNovo + '/' + AnoInteiro);
+  ShowMessage(DateToStr(vAnoNovo));
+
+end;
+
+procedure TAno.CalcularCarnaval(ano: TDateTime);
+begin
+  IncDay(ano,-47);
+end;
+
 procedure TAno.CalcullarPascoa(Ano: Integer);
 var
-  a, b, c, d, e, dia: Double;
-  mes: string;
+  a, b, c, d, e: Integer;
 begin
   a := Ano mod 19;
   b := Ano mod 4;
@@ -61,7 +86,19 @@ begin
     mes := 'Abril';
   end;
 
-  ShowMessage('A Pascoa cai no dia: '+IntToStr(dia)+ ' de '+ mes );
+ //Quando o domingo de Páscoa calculado for 26 de Abril, corrige-se para uma semana antes, ou seja, 19 de Abril
+  if (dia = 26) and (mes = 'Abril') then
+  begin
+    dia := 19;
+  end;
+
+ // Quando o domingo de Páscoa calculado for 25 de Abril e d=28 e a>10, então a Páscoa é em 18 de Abril
+  if (dia = 25) and (mes = 'Abril') and (d = 28) and (a > 10) then
+  begin
+    dia := 18;
+  end;
+
+  ShowMessage('A Pascoa cai no dia: ' + IntToStr(dia) + ' de ' + mes);
 
 end;
 
@@ -94,8 +131,11 @@ var
 begin
   AnoClasse := TAno.Create;
   try
-    Ano := StrToInt(edtAno.Text);
-    AnoClasse.VerificarIntervaloDeData(Ano);
+    AnoClasse.ano := StrToInt(edtAno.Text);
+    AnoClasse.VerificarIntervaloDeData(AnoClasse.ano);
+    AnoClasse.CalcullarPascoa(AnoClasse.ano);
+    AnoClasse.ConverterParaFormatoData(AnoClasse.dia, AnoClasse.mes);
+    AnoClasse.CalcularCarnaval(AnoClasse.vAnoNovo);
   finally
     FreeAndNil(AnoClasse);
   end;

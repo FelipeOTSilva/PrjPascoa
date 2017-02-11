@@ -151,7 +151,6 @@ begin
     AnoClasse.ConverterParaFormatoData(AnoClasse.dia, AnoClasse.mes);
     AnoClasse.CalcularCarnaval(AnoClasse.vAnoNovo);
     AnoClasse.CalcularSextaFeiraSanta(AnoClasse.vAnoNovo);
-    AnoClasse.CalcularCorpusChristi(AnoClasse.vAnoNovo);
   finally
     FreeAndNil(AnoClasse);
   end;

@@ -19,9 +19,11 @@ type
   end;
 
   TAno = class
-    ano, x, y: Integer;
+    dia, ano, x, y: Integer;
+    mes: string;
     procedure VerificarIntervaloDeData(VerificarAno: Integer);
     procedure CalcullarPascoa(Ano: Integer);
+    procedure CalcularOutrosFeriados(dia: Integer; mes: string);
   end;
 
 var
@@ -38,15 +40,26 @@ implementation
 
 { TAno }
 
+procedure TAno.CalcularOutrosFeriados(dia: Integer; mes: string);
+var
+  vAnoNovo, vMesNovo: TDateTime;
+  vDiaNovo, AnoInteiro: string;
+begin
+  AnoInteiro := IntToStr(Ano);
+  vDiaNovo := IntToStr(dia);
+  vAnoNovo := StrToDate(vDiaNovo + '/' + mes + '/' + AnoInteiro);
+  ShowMessage(DateToStr(vAnoNovo));
+
+end;
+
 procedure TAno.CalcullarPascoa(Ano: Integer);
 var
-  a, b, c, d, e, dia: Double;
-  mes: string;
+  a, b, c, d, e: Integer;
 begin
   a := Ano mod 19;
   b := Ano mod 4;
   c := Ano mod 7;
-  d := (19 * a + x) mod 30;
+  d := ((19 * a) + x) mod 30;
   e := ((2 * b) + (4 * c) + (6 * d) + y) mod 7;
 
   if (d + e) < 10 then
@@ -60,6 +73,20 @@ begin
     dia := (d + e - 9);
     mes := 'Abril';
   end;
+
+ //Quando o domingo de Páscoa calculado for 26 de Abril, corrige-se para uma semana antes, ou seja, 19 de Abril
+  if (dia = 26) and (mes = 'Abril') then
+  begin
+    dia := 19;
+  end;
+
+ // Quando o domingo de Páscoa calculado for 25 de Abril e d=28 e a>10, então a Páscoa é em 18 de Abril
+  if (dia = 25) and (mes = 'Abril') and (d = 28) and (a > 10) then
+  begin
+    dia := 18;
+  end;
+
+  ShowMessage('A Pascoa cai no dia: ' + IntToStr(dia) + ' de ' + mes);
 
 end;
 
@@ -94,6 +121,8 @@ begin
   try
     Ano := StrToInt(edtAno.Text);
     AnoClasse.VerificarIntervaloDeData(Ano);
+    AnoClasse.CalcullarPascoa(Ano);
+    AnoClasse.CalcularOutrosFeriados(AnoClasse.dia, AnoClasse.mes);
   finally
     FreeAndNil(AnoClasse);
   end;
