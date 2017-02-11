@@ -149,8 +149,8 @@ begin
     AnoClasse.VerificarIntervaloDeData(AnoClasse.ano);
     AnoClasse.CalcullarPascoa(AnoClasse.ano);
     AnoClasse.ConverterParaFormatoData(AnoClasse.dia, AnoClasse.mes);
-    AnoClasse.CalcularCarnaval(AnoClasse.vAnoNovo);
     AnoClasse.CalcularSextaFeiraSanta(AnoClasse.vAnoNovo);
+    AnoClasse.CalcularCarnaval(AnoClasse.vAnoNovo);
     AnoClasse.CalcularCorpusChristi(AnoClasse.vAnoNovo);
   finally
     FreeAndNil(AnoClasse);
